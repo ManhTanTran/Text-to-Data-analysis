@@ -1,31 +1,7 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
 venv/
-env/
-ENV/
-*.egg-info/
-
-# Streamlit
-.streamlit/secrets.toml
-
-# Database (giữ schema, không commit data)
-demo_db/*.db
-demo_db/*.sqlite
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-*.log
-nohup.out
+__pycache__/
+*.pyc
+demo_db/
+.env
+__MACOSX/
+spider_data/
