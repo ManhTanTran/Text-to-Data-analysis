@@ -1,159 +1,205 @@
-# 📊 NL2Viz — Natural Language to Visualization
+# 🚀 NL2Viz
 
-Hệ thống end-to-end chuyển câu hỏi tự nhiên thành biểu đồ trực quan, kết hợp:
-- **DAIL-SQL** (DeepSeek API) cho Text-to-SQL
-- **Local-Python-Viz** (Ollama Llama3 local) cho Text-to-Python visualization
+**Natural Language → SQL → Visualization**  
+Đặt câu hỏi bằng ngôn ngữ tự nhiên về database của bạn — nhận lại biểu đồ ngay tức thì.
 
-## 🎯 Pipeline tổng quan
+---
 
-```
-┌─────────────────┐
-│  User Question  │  "Show monthly revenue in 2024"
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────────────────────────┐
-│  Stage 1: DAIL-SQL (DeepSeek API)   │
-│  - Code Representation Prompt        │
-│  - Few-shot examples                 │
-│  - Output: SQL query                 │
-└────────┬────────────────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────┐
-│  Stage 2: SQLite Execution          │
-│  - Run SQL                           │
-│  - Return DataFrame                  │
-└────────┬────────────────────────────┘
-         │
-         ▼
-┌─────────────────────────────────────┐
-│  Stage 3: Local-Python-Viz          │
-│  (Ollama Llama3 local)              │
-│  - Zero-shot prompt                  │
-│  - Generate matplotlib code          │
-│  - Sandbox execute → Figure          │
-└────────┬────────────────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│   Chart in UI   │
-└─────────────────┘
-```
+## 📋 Requirements
 
-## 🏗️ Cấu trúc thư mục
+| Dependency | Version | Mục đích |
+|---|---|---|
+| Python | 3.10+ | Runtime |
+| Streamlit | ≥ 1.32 | Web UI |
+| Ollama | latest | Chạy Llama3 local |
+| DeepSeek API key | — | Stage 1: SQL generation |
+| pandas | ≥ 2.0 | DataFrame xử lý |
+| matplotlib | ≥ 3.8 | Render chart |
 
-```
-NL2Viz/
-├── app.py                          # Streamlit UI chính
-├── requirements.txt                # Python dependencies
-├── README.md                       # File này
-│
-├── modules/
-│   ├── __init__.py
-│   ├── dail_sql.py                 # DAIL-SQL (DeepSeek)
-│   ├── text_to_python.py           # Text-to-Python (Ollama local)
-│   └── ollama_client.py            # Wrapper gọi Ollama API
-│
-├── demo_db/
-│   └── sales_demo.db               # Demo SQLite database
-│
-├── scripts/
-│   ├── create_demo_db.py           # Tạo demo database
-│   ├── setup_ollama.sh             # Bash setup Ollama (Linux/Mac)
-│   ├── setup_ollama.ps1            # PowerShell setup Ollama (Windows)
-│   └── Modelfile_llama3            # Custom Modelfile cho llama3
-│
-└── docs/
-    ├── INSTALL.md                  # Hướng dẫn cài đặt chi tiết
-    └── ARCHITECTURE.md             # Kiến trúc hệ thống
-```
+---
 
-## 🚀 Quick Start
+## 🛠️ Installation
 
-### 1. Cài đặt Python dependencies
+### Bước 1 — Cài Python dependencies
 
 ```bash
+cd NL2Viz
 pip install -r requirements.txt
 ```
 
-### 2. Cài đặt và chạy Ollama (cho Local-Python-Viz)
+### Bước 2 — Cài & khởi động Ollama
 
-**Windows:**
-- Tải Ollama từ: https://ollama.com/download
-- Cài đặt và chạy:
-```powershell
-ollama pull llama3.2
-ollama serve  # giữ terminal này chạy
-```
-
-**Linux/Mac:**
 ```bash
+# macOS / Linux
 curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull model Llama3.2
 ollama pull llama3.2
-ollama serve &
+
+# Khởi động service (nếu chưa chạy)
+ollama serve
 ```
 
-Kiểm tra:
+> **Windows:** Tải installer tại [ollama.com/download](https://ollama.com/download)
+
+### Bước 3 — Cấu hình API key
+
+Tạo file `.env` trong thư mục `NL2Viz/`:
+
+```env
+DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+Hoặc export environment variable:
+
 ```bash
-curl http://localhost:11434/api/tags
+export DEEPSEEK_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
-### 3. Tạo demo database
+---
 
-```bash
-python scripts/create_demo_db.py
-```
-
-### 4. Cấu hình DeepSeek API key
-
-**Windows PowerShell:**
-```powershell
-$env:DEEPSEEK_API_KEY = "sk-your-key-here"
-```
-
-**Linux/Mac:**
-```bash
-export DEEPSEEK_API_KEY="sk-your-key-here"
-```
-
-### 5. Chạy app
+## ▶️ Chạy App
 
 ```bash
 streamlit run app.py
 ```
 
-Truy cập: http://localhost:8501
+Truy cập `http://localhost:8501`
 
-## 📋 Các câu hỏi mẫu
+---
 
-- "Show monthly revenue in 2024" → Line chart
-- "Revenue by product category" → Bar chart
-- "Revenue by region" → Pie chart
-- "Top 5 best-selling products" → Bar chart
-- "Revenue by customer" → Bar chart
+## 🧪 Usage
 
-## 🔧 Cấu hình
+1. **Upload SQLite database** (`.db` file) hoặc dùng sample data đi kèm trong `data/`
+2. **Gõ câu hỏi** bằng tiếng Việt hoặc tiếng Anh, ví dụ:
+   - *"Top 5 sản phẩm bán chạy nhất tháng 12?"*
+   - *"Doanh thu theo từng khu vực trong Q3?"*
+   - *"So sánh số lượng đơn hàng giữa các năm"*
+3. **Nhận kết quả**: SQL được sinh ra → DataFrame → Chart hiển thị inline
 
-### File `modules/dail_sql.py`
-- `DEEPSEEK_API_KEY`: API key (từ env var)
-- `MODEL_NAME`: Mặc định `deepseek-chat`
+---
 
-### File `modules/text_to_python.py`
-- `OLLAMA_ENDPOINT`: Mặc định `http://127.0.0.1:11434/api/generate`
-- `OLLAMA_MODEL`: Mặc định `llama3.2`
-- `USE_OLLAMA`: True = Llama3 local, False = DeepSeek API
+## 📁 Project Structure
 
-## 🛠️ Mock Mode
+```
+NL2Viz/
+├── app.py                    # Streamlit entrypoint
+├── modules/
+│   ├── dail_sql.py           # Stage 1 & 2: NL→SQL→DataFrame
+│   ├── text_to_python.py     # Stage 3: DataFrame→Chart
+│   └── ollama_client.py      # Ollama health check & completion
+├── data/
+│   └── *.db                  # Sample SQLite databases
+├── requirements.txt
+└── .env.example
+```
 
-Nếu chưa có DeepSeek API key hoặc Ollama, hệ thống tự động chuyển sang **Mock mode** sinh SQL/code đơn giản theo keyword. Đủ để test UI mà không cần LLM.
+---
 
-## 📚 Tài liệu tham khảo
+## 🔧 Module Overview
 
-1. **DAIL-SQL** — Gao et al., 2023. *"Text-to-SQL Empowered by Large Language Models: A Benchmark Evaluation"*
-2. **Local-Python-Viz** — *"Evaluating Local Open-Source LLMs for Privacy-Preserving Data Visualization via Zero-Shot Prompting"*
-3. **Spider Dataset** — Yu et al., 2018
+### `modules/dail_sql.py` — DAIL-SQL
 
-## ❓ Troubleshooting
+Implement pipeline **Stage 1 + 2**:
 
-Xem [docs/INSTALL.md](docs/INSTALL.md) để biết các lỗi thường gặp và cách fix.
+- Đọc DB schema (CREATE TABLE statements)
+- Build prompt theo chuẩn **DAIL-SQL** (Code Representation + Few-shot Q+SQL pairs)
+- Gọi **DeepSeek-Chat API** để sinh SQL
+- Execute SQL trên SQLite → trả về `pandas.DataFrame`
+
+```python
+from modules.dail_sql import generate_sql, execute_sql
+
+sql = generate_sql(question="Top 5 customers by revenue", db_path="data/sales.db")
+df  = execute_sql(sql, db_path="data/sales.db")
+```
+
+### `modules/text_to_python.py` — Local-Python-Viz
+
+Implement pipeline **Stage 3**:
+
+- Build Zero-Shot prompt theo cấu trúc Khan et al. (2025): `Context + Requirement + Constraint`
+- Gọi **Llama3.2 qua Ollama** để sinh matplotlib code
+- Clean code (bỏ markdown fences, ANSI codes) + AST transform
+- Sandbox execute → trả về `matplotlib.Figure`
+
+```python
+from modules.text_to_python import text_to_figure
+
+fig = text_to_figure(question="Top 5 customers by revenue", df=df)
+```
+
+### `modules/ollama_client.py` — Ollama Wrapper
+
+```python
+from modules.ollama_client import is_ollama_alive, ollama_complete
+
+if is_ollama_alive():
+    response = ollama_complete(prompt="...", model="llama3.2")
+```
+
+---
+
+## 🔄 Fallback Chain
+
+Khi Ollama không khả dụng hoặc sinh code lỗi, hệ thống tự động fallback:
+
+```
+Ollama running?
+  ├── Yes → Llama3.2 local → Success ✅
+  │                        → Failed ↓
+  └── No  ↓
+        DeepSeek key set?
+          ├── Yes → DeepSeek API → Success ✅
+          │                     → Failed ↓
+          └── No  → Mock template chart ✅
+```
+
+---
+
+## ⚡ Performance
+
+| Stage | LLM | Latency (typical) | Token/query |
+|---|---|---|---|
+| Stage 1 — SQL gen | DeepSeek (cloud) | ~1–2s | ~700 |
+| Stage 2 — SQL exec | sqlite3 (local) | <100ms | — |
+| Stage 3 — Viz code | Llama3.2 (local) | ~3–10s | ~500 |
+| **Total** | | **~5–15s** | **~1,200** |
+
+> Latency Stage 3 phụ thuộc vào GPU. Có GPU → ~3s, CPU only → ~10s.
+
+---
+
+## 🔒 Privacy
+
+| Data | Đích đến | Ghi chú |
+|---|---|---|
+| User question | DeepSeek API | Cloud |
+| DB schema | DeepSeek API | Cloud — chỉ schema, **không có data** |
+| DataFrame (actual data) | Llama3 local | **Local only** — không rời máy |
+| SQL / Python code | Local | Local |
+
+Enterprise data (revenue, customer PII) chỉ xử lý local.
+
+---
+
+## 🐛 Troubleshooting
+
+**Ollama không kết nối được:**
+```bash
+# Kiểm tra service
+curl http://localhost:11434/api/tags
+
+# Khởi động lại
+ollama serve
+```
+
+**DeepSeek API lỗi 401:**
+```bash
+# Kiểm tra key đã set chưa
+echo $DEEPSEEK_API_KEY
+```
+
+**Chart trống / lỗi exec:**
+- Thử câu hỏi rõ ràng hơn, ví dụ thêm loại chart: *"Vẽ bar chart top 5 sản phẩm..."*
+- Kiểm tra Ollama model đã pull chưa: `ollama list`
