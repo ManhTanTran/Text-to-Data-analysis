@@ -1,0 +1,433 @@
+[
+  {
+    "id": "top_10_revenue_vi",
+    "question": "Hiện top 10 nhân viên có doanh thu cao nhất",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Mã nhân viên bán hàng", "Sales Rep ID"], ["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total Revenue"]],
+      "sql_must_contain": ["GROUP BY", "ORDER BY", "DESC", "LIMIT 10", "SUM(TO_NUMBER"],
+      "sql_must_not_contain": ["\"Trung bình doanh thu\" FROM"],
+      "sort_column_group": ["Tổng doanh thu", "Tổng giá trị", "Total Revenue"],
+      "sort_desc": true,
+      "max_rows": 10,
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "top_3_revenue_vi",
+    "question": "Top 3 sales representative có tổng doanh thu cao nhất là ai?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total Revenue"]],
+      "sql_must_contain": ["ORDER BY", "DESC", "LIMIT 3"],
+      "sort_column_group": ["Tổng doanh thu", "Tổng giá trị", "Total Revenue"],
+      "sort_desc": true,
+      "max_rows": 3,
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "top_5_revenue_en",
+    "question": "Show the top 5 sales reps by revenue",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Sales Rep ID"], ["Sales Rep Name"], ["Total Revenue", "Total Value", "Total Sales Value"]],
+      "sql_must_contain": ["GROUP BY", "ORDER BY", "DESC", "LIMIT 5"],
+      "sort_column_group": ["Total Revenue", "Total Value", "Total Sales Value"],
+      "sort_desc": true,
+      "max_rows": 5,
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "above_average_vi",
+    "question": "Có những nhân viên bán hàng nào có hiệu suất kinh doanh vượt trội so với bình quân?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Bình quân", "Average"], ["Chênh lệch", "Difference"], ["Tổng giá trị", "Tổng doanh thu", "Total"]],
+      "sql_must_contain": ["CROSS JOIN", "AVG", "WHERE", ">"],
+      "sql_must_not_contain": ["SELECT \"Trung bình giá trị\""],
+      "min_rows": 1,
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "above_average_en",
+    "question": "Which sales representatives are above the average sales performance?",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Sales Rep Name"], ["Average"], ["Difference"], ["Total"]],
+      "sql_must_contain": ["CROSS JOIN", "AVG", "WHERE", ">"],
+      "min_rows": 1,
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "classify_performance_vi",
+    "question": "Làm thế nào để phân loại Sales_Rep_ID thành các nhóm dựa trên hiệu suất bán hàng?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Mã nhân viên bán hàng", "Sales Rep ID"], ["Nhóm hiệu suất", "Performance Group"], ["Tổng giá trị", "Tổng doanh thu", "Total"]],
+      "sql_must_contain": ["NTILE(3)", "SUM(TO_NUMBER", "GROUP BY"],
+      "sql_must_not_contain": ["\"Số lượng nhóm\" ,", "COUNT(DISTINCT \"Sales_Rep_ID\") AS \"Số lượng nhóm\""],
+      "min_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "classify_performance_en",
+    "question": "Classify sales reps into performance groups based on sales value",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Sales Rep ID"], ["Performance Group"], ["Total"]],
+      "sql_must_contain": ["NTILE(3)", "SUM(TO_NUMBER", "GROUP BY"],
+      "min_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "total_by_year_vi",
+    "question": "Tổng doanh thu theo từng năm là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Năm", "Year"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "sort_column_group": ["Năm", "Year"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "average_by_year_vi",
+    "question": "Trung bình giá trị bán hàng theo năm là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Năm", "Year"], ["Trung bình", "Average"]],
+      "sql_must_contain": ["AVG(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "average_by_rep_vi",
+    "question": "Giá trị bán hàng trung bình của từng nhân viên là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Trung bình", "Average"]],
+      "sql_must_contain": ["AVG(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "total_by_rep_vi",
+    "question": "Tổng doanh thu của từng nhân viên bán hàng",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "highest_postcode_vi",
+    "question": "Postcode nào có tổng doanh thu cao nhất?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Postcode", "Mã bưu chính"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY", "ORDER BY", "DESC", "LIMIT"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "total_by_postcode_vi",
+    "question": "Tổng doanh thu theo postcode",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Postcode", "Mã bưu chính"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "count_rows_vi",
+    "question": "Đếm tổng số dòng trong Sheet1",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Số lượng", "Count", "Số dòng"]],
+      "sql_must_contain": ["COUNT"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "show_all_vi",
+    "question": "Hiển thị toàn bộ dữ liệu từ Sheet1",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Postcode"], ["Sales Rep ID", "Mã nhân viên"], ["Year", "Năm"], ["Value", "Giá trị"]],
+      "min_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "sales_by_year_rep_vi",
+    "question": "Doanh thu thay đổi theo từng năm cho mỗi nhân viên bán hàng như thế nào?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Năm", "Year"], ["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "best_rep_each_year_vi",
+    "question": "Nhân viên bán hàng nào có doanh thu cao nhất trong từng năm?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Năm", "Year"], ["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "min_rows": 1,
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "low_revenue_reps_vi",
+    "question": "Những nhân viên nào có doanh thu thấp nhất?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY", "ORDER BY", "ASC"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "min_revenue_vi",
+    "question": "Doanh thu thấp nhất là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Nhỏ nhất", "Minimum", "Doanh thu"]],
+      "sql_must_contain": ["MIN"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "max_revenue_vi",
+    "question": "Doanh thu cao nhất là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Lớn nhất", "Maximum", "Doanh thu"]],
+      "sql_must_contain": ["MAX"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "total_sales_scalar_vi",
+    "question": "Tổng doanh thu toàn bộ là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "avg_sales_scalar_vi",
+    "question": "Trung bình doanh thu toàn bộ là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Trung bình doanh thu", "Trung bình giá trị", "Average"]],
+      "sql_must_contain": ["AVG(TO_NUMBER"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "sales_distribution_postcode_vi",
+    "question": "Phân bố doanh thu theo khu vực postcode như thế nào?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Postcode", "Mã bưu chính"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "rep_transaction_count_vi",
+    "question": "Mỗi nhân viên bán hàng có bao nhiêu giao dịch?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Số lượng", "Số giao dịch", "Count"]],
+      "sql_must_contain": ["COUNT", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "distinct_rep_count_vi",
+    "question": "Có bao nhiêu nhân viên bán hàng khác nhau?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Số lượng", "Count"]],
+      "sql_must_contain": ["COUNT", "DISTINCT"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "year_2012_sales_vi",
+    "question": "Tổng doanh thu trong năm 2012 là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["2012", "SUM(TO_NUMBER"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "postcodes_for_jane_vi",
+    "question": "Jane bán hàng ở những postcode nào?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Postcode"]],
+      "sql_must_contain": ["Jane"],
+      "min_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "sales_rep_name_alias_vi",
+    "question": "Liệt kê tên nhân viên bán hàng và tổng doanh thu",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["Sales_Rep_Name", "SUM(TO_NUMBER"],
+      "sql_must_not_contain": ["\"Tên nhân viên bán hàng\" FROM", "\"Tổng doanh thu\" FROM"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "english_alias_en",
+    "question": "List sales rep names and total revenue",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Sales Rep Name"], ["Total Revenue", "Total Value", "Total"]],
+      "sql_must_contain": ["Sales_Rep_Name", "SUM(TO_NUMBER"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "no_chart_text_only_vi",
+    "question": "Liệt kê tên nhân viên bán hàng",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"]],
+      "min_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "no_chart_id_only_vi",
+    "question": "Liệt kê mã nhân viên bán hàng",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Mã nhân viên bán hàng", "Sales Rep ID"]],
+      "min_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "year_column_not_y_axis_vi",
+    "question": "Hiển thị năm và trung bình giá trị bán hàng theo năm",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Năm", "Year"], ["Trung bình", "Average"]],
+      "sql_must_contain": ["AVG(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "top_postcodes_en",
+    "question": "Show top 5 postcodes by total sales value",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Postcode"], ["Total Sales Value", "Total Value", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY", "ORDER BY", "DESC", "LIMIT 5"],
+      "max_rows": 5,
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "average_sales_rep_en",
+    "question": "What is the average sales value for each sales representative?",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Sales Rep Name"], ["Average Sales Value", "Average Value", "Average"]],
+      "sql_must_contain": ["AVG(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "total_by_year_en",
+    "question": "What is the total sales value for each year?",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Year"], ["Total Sales Value", "Total Value", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "count_by_year_en",
+    "question": "How many sales records are there in each year?",
+    "language": "en",
+    "expected": {
+      "required_column_groups": [["Year"], ["Count", "Row Count"]],
+      "sql_must_contain": ["COUNT", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "sales_gap_top_bottom_vi",
+    "question": "Chênh lệch doanh thu giữa nhân viên cao nhất và thấp nhất là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Chênh lệch", "Difference"]],
+      "sql_must_contain": ["MAX", "MIN"],
+      "max_rows": 1,
+      "expect_chart": false
+    }
+  },
+  {
+    "id": "rep_sales_in_year_vi",
+    "question": "Doanh thu của từng nhân viên trong năm 2013",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Tổng doanh thu", "Tổng giá trị", "Total"]],
+      "sql_must_contain": ["2013", "SUM(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "postcode_average_vi",
+    "question": "Trung bình doanh thu theo từng postcode",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Postcode", "Mã bưu chính"], ["Trung bình", "Average"]],
+      "sql_must_contain": ["AVG(TO_NUMBER", "GROUP BY"],
+      "expect_chart": true
+    }
+  },
+  {
+    "id": "rep_best_year_vi",
+    "question": "Năm nào mỗi nhân viên bán hàng đạt doanh thu cao nhất?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [["Tên nhân viên bán hàng", "Sales Rep Name"], ["Năm", "Year"], ["Tổng doanh thu", "Total"]],
+      "sql_must_contain": ["SUM(TO_NUMBER", "GROUP BY"],
+      "min_rows": 1,
+      "expect_chart": true
+    }
+  }
+]

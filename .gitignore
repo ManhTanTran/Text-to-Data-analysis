@@ -1,0 +1,10 @@
+DataQuery-Web/backend/venv/
+DataQuery-Web/frontend/node_modules/
+DataQuery-Web/frontend/dist/
+DataQuery-Web/**/__pycache__/
+*.pyc
+DataQuery-Web/frontend/vite.*.log
+DataQuery-Web/backend/.env
+DataQuery-Web/backend/rag_index/*.json
+DataQuery-Web/backend/eval_reports/*.json
+DataQuery-Web/backend/eval_reports/*.md
