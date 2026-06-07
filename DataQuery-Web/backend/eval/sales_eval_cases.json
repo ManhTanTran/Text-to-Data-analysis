@@ -290,7 +290,7 @@
     "question": "Jane bán hàng ở những postcode nào?",
     "language": "vi",
     "expected": {
-      "required_column_groups": [["Postcode"]],
+      "required_column_groups": [["Postcode", "Mã bưu chính"]],
       "sql_must_contain": ["Jane"],
       "min_rows": 1,
       "expect_chart": false

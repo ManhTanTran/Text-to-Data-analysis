@@ -6,7 +6,7 @@ import pandas as pd
 
 
 _NULL_LITERALS = {"", "nan", "none", "null", "n/a", "na", "-"}
-_IDENTIFIER_TERMS = {"id", "code", "postcode", "postal", "zip", "phone", "fax"}
+_IDENTIFIER_TERMS = {"id", "code", "postcode", "postal", "zip", "phone", "fax", "date", "birth", "dob", "ngay"}
 
 
 def _name_key(value: object) -> str:

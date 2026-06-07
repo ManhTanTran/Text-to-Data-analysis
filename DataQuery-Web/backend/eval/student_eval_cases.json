@@ -1,0 +1,73 @@
+[
+  {
+    "id": "student_excellent_scholarship",
+    "question": "Sinh viên nào được đề xuất học bổng Xuất sắc?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["ma sv", "student id"],
+        ["ho ten", "student name"],
+        ["de xuat hb", "hoc bong"],
+        ["tbchk", "diem"]
+      ],
+      "sql_must_contain": ["\"Đề xuất HB\"", "WHERE", "Xuất sắc"],
+      "sql_must_not_contain": ["GROUP BY"],
+      "min_rows": 1
+    }
+  },
+  {
+    "id": "student_avg_tbchk_by_sheet",
+    "question": "Điểm TBCHK trung bình theo từng Sheet là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["sheet"],
+        ["tbchk", "diem", "trung binh"]
+      ],
+      "sql_must_contain": ["\"Sheet\"", "\"TBCHK\"", "GROUP BY"],
+      "min_rows": 2
+    }
+  },
+  {
+    "id": "student_count_distinct",
+    "question": "Dữ liệu có bao nhiêu sinh viên?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["so luong", "count"]
+      ],
+      "sql_must_contain": ["COUNT(DISTINCT", "\"Mã SV\""],
+      "sql_must_not_contain": ["COUNT(*)"],
+      "max_rows": 1
+    }
+  },
+  {
+    "id": "student_top_by_tbchk",
+    "question": "Top 3 sinh viên có TBCHK cao nhất là ai?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["ma sv", "student id"],
+        ["ho ten", "student name"],
+        ["tbchk", "diem"]
+      ],
+      "sql_must_contain": ["\"TBCHK\"", "ORDER BY", "LIMIT 3"],
+      "max_rows": 3
+    }
+  },
+  {
+    "id": "student_drl_distribution",
+    "question": "Phân bố ĐRL theo từng mức là như thế nào?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["drl"],
+        ["so luong", "count"]
+      ],
+      "sql_must_contain": ["\"ĐRL\"", "COUNT", "GROUP BY"],
+      "sql_must_not_contain": ["AVG", "\"Ngày sinh\"", "strftime"],
+      "min_rows": 1,
+      "expect_chart": true
+    }
+  }
+]

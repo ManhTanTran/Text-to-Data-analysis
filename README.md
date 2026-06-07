@@ -1,120 +1,153 @@
-# 📊 Text-to-Data-analysis
+# Text-to-Data-analysis
 
-> **NL2Viz** — Hỏi bằng tiếng tự nhiên, nhận lại biểu đồ tức thì.  
-> Pipeline 2-stage LLM: DeepSeek (SQL) × Llama3 local (Visualization)
+Conversational AI system for data analysis: users upload tabular data, ask questions in natural language, and receive SQL results plus charts. The active application in this repository is `DataQuery-Web`, a FastAPI + React implementation of an NL2SQL + NL2Viz pipeline.
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.x-FF4B4B?logo=streamlit)](https://streamlit.io/)
-[![Ollama](https://img.shields.io/badge/Ollama-local-black?logo=ollama)](https://ollama.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+## Highlights
 
----
-
-## 🗂️ Repository Structure
-
-```
-Text-to-Data-analysis/
-├── NL2Viz/          # 🚀 Production app — Streamlit + 2-stage LLM pipeline
-│   ├── app.py
-│   ├── modules/
-│   │   ├── dail_sql.py          # Stage 1: NL → SQL (DeepSeek)
-│   │   ├── text_to_python.py    # Stage 3: DataFrame → Chart (Llama3)
-│   │   └── ollama_client.py     # Ollama health check & wrapper
-│   ├── data/                    # Sample SQLite databases
-│   ├── requirements.txt
-│   └── README.md
-│
-├── research/        # 📑 Paper, benchmark & evaluation results
-│   ├── report/      # Báo cáo nghiên cứu (PDF / LaTeX)
-│   ├── benchmark/   # Kết quả đánh giá DAIL-SQL & Local-Python-Viz
-│   └── README.md
-│
-└── ARCHITECTURE.md  # Thiết kế hệ thống chi tiết
-```
-
----
-
-## ✨ Highlights
-
-| Tính năng | Chi tiết |
+| Feature | Description |
 |---|---|
-| 🗣️ Natural Language input | Hỏi bằng tiếng Việt hoặc tiếng Anh |
-| 🧠 2-stage LLM pipeline | DeepSeek → SQL, Llama3 → Chart code |
-| 🔒 Privacy-first | Data thực tế xử lý **100% local**, không gửi cloud |
-| 📊 Auto visualization | Bar, Line, Pie, Scatter tự động sinh ra |
-| 🔄 Fallback chain | Ollama → DeepSeek → Mock template |
+| Natural-language data queries | Ask questions in Vietnamese or English over uploaded Excel/CSV data |
+| NL2SQL pipeline | Uses deterministic planning when possible and an LLM SQL path for fallback generation |
+| RAG for Text-to-SQL | Retrieves few-shot question-SQL examples from Spider train before prompting the LLM |
+| Embedding-based retrieval | Encodes user questions and Spider examples with `sentence-transformers`, ranks by cosine similarity, and injects nearest examples into the prompt |
+| Auto visualization | Produces chart-ready outputs for common aggregation and ranking queries |
+| Evaluation scripts | Includes app-level benchmark and Spider retrieval benchmark scripts |
 
----
+## Current Results
 
-## ⚡ Quick Start
+### Spider 200-case Retrieval Benchmark
 
-### 1. Clone & cài dependencies
+Evaluation setup: Spider dev subset, 200 cases, DeepSeek provider, candidate pool 3000, DAIL threshold 0.85.
+
+| Mode | EX |
+|---|---:|
+| no-RAG | 67.50% |
+| BM25 retrieval | 71.00% |
+| LLM + embedding retrieval | **71.50%** |
+| DAIL-style retrieval | 67.00% |
+
+`EX` means execution accuracy: the generated SQL is counted as correct when it returns the same result as the gold SQL after execution.
+
+### DataQuery-Web App Benchmark
+
+Evaluation setup: 40 built-in sales-analysis cases.
+
+| Metric | Score |
+|---|---:|
+| Overall | **96.31/100** |
+| Execution | 30.00/30 |
+| Result columns/intent | 28.31/30 |
+| Value correctness | 19.00/20 |
+| Chart behavior | 9.00/10 |
+| Stability | 10.00/10 |
+
+## Repository Structure
+
+```text
+Text-to-Data-analysis/
+├── DataQuery-Web/
+│   ├── backend/
+│   │   ├── main.py
+│   │   ├── modules/
+│   │   │   ├── nl2sql.py
+│   │   │   ├── rag.py
+│   │   │   ├── dail_sql.py
+│   │   │   ├── intent_planner.py
+│   │   │   ├── relational_schema.py
+│   │   │   ├── semantic_schema.py
+│   │   │   └── viz.py
+│   │   ├── scripts/
+│   │   │   ├── evaluate_app.py
+│   │   │   ├── evaluate_spider.py
+│   │   │   ├── benchmark_spider_matrix.py
+│   │   │   └── build_rag_index.py
+│   │   ├── eval/
+│   │   └── requirements.txt
+│   └── frontend/
+│       ├── src/
+│       └── package.json
+└── NL2Viz/
+    └── Legacy Streamlit prototype
+```
+
+## Quick Start
+
+### 1. Backend
 
 ```bash
-git clone https://github.com/ManhTanTran/Text-to-Data-analysis.git
-cd Text-to-Data-analysis/NL2Viz
+cd DataQuery-Web/backend
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
+copy .env.example .env
+uvicorn main:app --reload --port 8000
 ```
 
-### 2. Cấu hình API key
+Set your DeepSeek API key in `DataQuery-Web/backend/.env`:
+
+```env
+LLM_PROVIDER=auto
+DEEPSEEK_API_KEY=your_deepseek_api_key_here
+DEEPSEEK_MODEL=deepseek-v4-flash
+RAG_ENABLED=true
+RAG_RETRIEVAL_MODE=embedding
+RAG_TOP_K=4
+RAG_CANDIDATE_POOL=3000
+```
+
+### 2. Frontend
 
 ```bash
-# .env hoặc export trực tiếp
-export DEEPSEEK_API_KEY="your_deepseek_key"
+cd DataQuery-Web/frontend
+npm install
+npm run dev
 ```
 
-### 3. Khởi động Ollama + pull model
+Open the Vite URL shown in the terminal, usually `http://localhost:5173`.
+
+## RAG Method
+
+The RAG component uses the Spider training split as an example corpus. Each Spider example stores a natural-language question, SQL query, database identifier, schema information, and lightweight SQL features.
+
+For the best-performing `LLM + embedding` mode:
+
+1. Encode Spider train questions offline with `sentence-transformers`.
+2. Encode the user's input question at inference time.
+3. Rank Spider examples by cosine similarity.
+4. Select the nearest question-SQL examples.
+5. Insert those examples into the LLM prompt as few-shot demonstrations.
+6. Ask the LLM to generate SQL for the current uploaded schema.
+
+This retrieval mode achieved 71.50% EX on the latest 200-case Spider benchmark, compared with 67.50% for no-RAG.
+
+## Evaluation
+
+Run the app benchmark:
 
 ```bash
-ollama serve
-ollama pull llama3.2
+cd DataQuery-Web/backend
+python scripts/evaluate_app.py --provider deepseek
 ```
 
-### 4. Chạy app
+Run the Spider retrieval matrix:
 
 ```bash
-streamlit run app.py
+cd DataQuery-Web/backend
+python scripts/benchmark_spider_matrix.py --provider deepseek --limit 200 --candidate-pool 3000 --modes no_rag,bm25,embedding,dail
 ```
 
-Mở trình duyệt tại `http://localhost:8501` và đặt câu hỏi như:
+If Spider data is not found automatically, set:
 
-> *"Tổng doanh thu theo từng tháng trong năm ngoái là bao nhiêu?"*
-
----
-
-## 🏗️ How It Works
-
-```
-User Question (NL)
-       │
-       ▼
-  [Stage 1] DAIL-SQL ──── DeepSeek API ──→  SQL Query
-       │
-       ▼
-  [Stage 2] SQL Executor ─ sqlite3/pandas ─→ DataFrame
-       │
-       ▼
-  [Stage 3] Local-Python-Viz ── Llama3 ──→  matplotlib Figure
-       │
-       ▼
-   📊 Chart (inline Streamlit)
+```env
+SPIDER_DATA_DIR=C:\path\to\spider_data
 ```
 
-Chi tiết đầy đủ: xem [`ARCHITECTURE.md`](ARCHITECTURE.md)
+## Notes
 
----
+- `DataQuery-Web/backend/.env`, Python virtual environments, `node_modules`, and build outputs are ignored by Git.
+- Keep API keys out of commits. Use `.env` locally and `.env.example` for shared configuration.
+- The legacy `NL2Viz` directory is kept as the earlier Streamlit prototype; new development should target `DataQuery-Web`.
 
-## 📚 Research
+## License
 
-Dự án được xây dựng dựa trên 2 paper:
-
-- **DAIL-SQL** (Gao et al., 2023) — *Efficient Prompt Engineering for Text-to-SQL*
-- **Local-Python-Viz** (Khan et al., 2025) — *Zero-Shot Chart Generation with Local LLMs*
-
-Kết quả benchmark và báo cáo nghiên cứu đầy đủ: xem [`research/`](research/README.md)
-
----
-
-## 📄 License
-
-MIT © 2025 [ManhTanTran](https://github.com/ManhTanTran)
+MIT © 2026 ManhTanTran

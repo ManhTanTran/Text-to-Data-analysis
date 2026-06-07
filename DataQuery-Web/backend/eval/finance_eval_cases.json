@@ -1,0 +1,44 @@
+[
+  {
+    "id": "finance_trend_revenue_cogs",
+    "question": "Tổng doanh thu và tổng chi phí sản xuất có tăng giảm theo thời gian không?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["thoi gian", "time"],
+        ["doanh thu", "revenue"],
+        ["chi phi san xuat", "cogs"]
+      ],
+      "sql_must_contain": ["strftime('%Y-%m'", "\"Revenue\"", "\"COGS\"", "GROUP BY"],
+      "sql_must_not_contain": ["2022"],
+      "min_rows": 2
+    }
+  },
+  {
+    "id": "finance_missing_marketing_cost",
+    "question": "Tổng doanh thu và chi phí marketing là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["doanh thu", "revenue"]
+      ],
+      "sql_must_contain": ["\"Revenue\""],
+      "sql_must_not_contain": ["Marketing", "\"COGS\"", "2022"],
+      "max_rows": 1
+    }
+  },
+  {
+    "id": "finance_total_revenue_cogs_unspecified_range",
+    "question": "Tổng doanh thu và tổng chi phí sản xuất trong một khoảng thời gian cụ thể là bao nhiêu?",
+    "language": "vi",
+    "expected": {
+      "required_column_groups": [
+        ["doanh thu", "revenue"],
+        ["chi phi san xuat", "cogs"]
+      ],
+      "sql_must_contain": ["\"Revenue\"", "\"COGS\""],
+      "sql_must_not_contain": ["BETWEEN", "2022"],
+      "max_rows": 1
+    }
+  }
+]

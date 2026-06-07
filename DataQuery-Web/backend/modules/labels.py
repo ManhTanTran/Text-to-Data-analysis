@@ -28,6 +28,8 @@ _COLUMN_TRANSLATIONS = {
         "sales value": "giá trị bán hàng",
         "annual sales value": "giá trị bán hàng hằng năm",
         "revenue": "doanh thu",
+        "cogs": "chi phí sản xuất",
+        "cost of goods sold": "chi phí sản xuất",
         "sales": "doanh số",
         "total sales": "tổng doanh số",
         "price": "giá",
@@ -49,6 +51,8 @@ _COLUMN_TRANSLATIONS = {
         "sales value": "Sales Value",
         "annual sales value": "Annual Sales Value",
         "revenue": "Revenue",
+        "cogs": "COGS",
+        "cost of goods sold": "Cost of Goods Sold",
         "sales": "Sales",
         "total sales": "Total Sales",
         "price": "Price",
@@ -116,10 +120,16 @@ def display_column_label(column: str, language: str = "vi") -> str:
     """Convert raw SQL result labels into UI-friendly labels in the selected language."""
     lang = normalize_language(language)
     raw = str(column).strip()
+    raw_for_label = re.sub(
+        r'\bTO_NUMBER\s*\(\s*("[^"]+"|\'[^\']+\'|`[^`]+`|\[[^\]]+\])\s*\)',
+        r"\1",
+        raw,
+        flags=re.IGNORECASE,
+    )
     match = re.match(
         r'^(AVG|SUM|COUNT|MIN|MAX)\s*\(\s*(?:DISTINCT\s+)?(?:"([^"]+)"|'
         r"'([^']+)'|`([^`]+)`|\[([^\]]+)\]|([^)]+))\s*\)$",
-        raw,
+        raw_for_label,
         flags=re.IGNORECASE,
     )
     if not match:

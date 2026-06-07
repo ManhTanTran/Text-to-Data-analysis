@@ -21,10 +21,16 @@ from modules.excel_parser import parse_file_to_sqlite
 from modules.labels import humanize_dataframe_columns, normalize_language
 from modules.nl2sql import generate_sql
 from modules.numeric import parse_number
+from modules.semantic_schema import infer_semantic_schema
 from modules.viz import df_to_chart_base64
 
 
 DEFAULT_CASES = BACKEND_DIR / "eval" / "sales_eval_cases.json"
+FIXTURE_CASES = {
+    "sales": DEFAULT_CASES,
+    "finance": BACKEND_DIR / "eval" / "finance_eval_cases.json",
+    "student": BACKEND_DIR / "eval" / "student_eval_cases.json",
+}
 DEFAULT_REPORT_DIR = BACKEND_DIR / "eval_reports"
 
 RUBRIC = {
@@ -36,21 +42,33 @@ RUBRIC = {
 }
 
 BAD_SQL_PATTERNS = [
-    r'"Trung bình doanh thu"\s+FROM',
-    r'"Trung bình giá trị"\s+FROM',
-    r'"Tổng doanh thu"\s+FROM',
-    r'"Tổng giá trị"\s+FROM',
-    r'"Số lượng nhóm"\s*,',
+    r'^\s*SELECT\s+"Trung bình doanh thu"\s+FROM',
+    r'^\s*SELECT\s+"Trung bình giá trị"\s+FROM',
+    r'^\s*SELECT\s+"Tổng doanh thu"\s+FROM',
+    r'^\s*SELECT\s+"Tổng giá trị"\s+FROM',
+    r'^\s*SELECT\s+"Số lượng nhóm"\s*,',
 ]
 
 
 def text_key(value: object) -> str:
-    text = unicodedata.normalize("NFKD", str(value or ""))
+    text = str(value or "").replace("đ", "d").replace("Đ", "D")
+    text = unicodedata.normalize("NFKD", text)
     text = text.encode("ascii", "ignore").decode("ascii").lower()
     return re.sub(r"[^a-z0-9]+", " ", text).strip()
 
 
-def make_fixture_csv() -> bytes:
+def _csv_bytes(rows: list[list[Any]]) -> bytes:
+    with tempfile.NamedTemporaryFile("w", newline="", encoding="utf-8-sig", suffix=".csv", delete=False) as handle:
+        writer = csv.writer(handle)
+        writer.writerows(rows)
+        path = Path(handle.name)
+    try:
+        return path.read_bytes()
+    finally:
+        path.unlink(missing_ok=True)
+
+
+def make_sales_fixture_csv() -> bytes:
     rows = [
         ["Postcode", "Sales_Rep_ID", "Sales_Rep_Name", "Year", "Value"],
         ["1000", "A", "John", "2011", "120000"],
@@ -66,23 +84,46 @@ def make_fixture_csv() -> bytes:
         ["4000", "D", "Maria", "2012", "70000"],
         ["5000", "E", "Linh", "2013", "400000"],
     ]
-    with tempfile.NamedTemporaryFile("w", newline="", encoding="utf-8-sig", suffix=".csv", delete=False) as handle:
-        writer = csv.writer(handle)
-        writer.writerows(rows)
-        path = Path(handle.name)
-    try:
-        return path.read_bytes()
-    finally:
-        path.unlink(missing_ok=True)
+    return _csv_bytes(rows)
 
 
-def load_dataset(data_path: Path | None) -> tuple[str, dict[str, list[str]]]:
+def make_finance_fixture_csv() -> bytes:
+    rows = [
+        ["Date", "Revenue", "COGS"],
+        ["2023-01-15", "100000", "42000"],
+        ["2023-01-31", "125000", "52000"],
+        ["2023-02-15", "118000", "50000"],
+        ["2023-02-28", "140000", "61000"],
+        ["2023-03-15", "160000", "73000"],
+        ["2023-03-31", "155000", "69000"],
+    ]
+    return _csv_bytes(rows)
+
+
+def make_student_fixture_csv() -> bytes:
+    rows = [
+        ["Sheet", "TT", "Mã SV", "Họ tên", "Ngày sinh", "Số TC ĐK", "TBCHK", "ĐRL", "Đề xuất HB", "Ghi chú"],
+        ["CNTT", "1", "SV001", "Nguyễn An", "2002-01-10", "18", "9.1", "Tốt", "Xuất sắc", ""],
+        ["CNTT", "2", "SV002", "Trần Bình", "2002-02-12", "18", "8.2", "Khá", "Giỏi", ""],
+        ["Kinh tế", "1", "SV003", "Lê Chi", "2001-03-20", "20", "8.9", "Tốt", "Xuất sắc", ""],
+        ["Kinh tế", "2", "SV004", "Phạm Dũng", "2001-04-22", "20", "7.1", "Khá", "Khá", ""],
+        ["Ngôn ngữ", "1", "SV005", "Hoàng Hà", "2002-05-18", "16", "6.4", "Trung bình", "Không đạt", ""],
+    ]
+    return _csv_bytes(rows)
+
+
+def load_dataset(data_path: Path | None, fixture: str = "sales") -> tuple[str, dict[str, list[str]]]:
     if data_path:
         raw = data_path.read_bytes()
         filename = data_path.name
     else:
-        raw = make_fixture_csv()
-        filename = "sales_eval_fixture.csv"
+        fixture_builders = {
+            "sales": make_sales_fixture_csv,
+            "finance": make_finance_fixture_csv,
+            "student": make_student_fixture_csv,
+        }
+        raw = fixture_builders[fixture]()
+        filename = f"{fixture}_eval_fixture.csv"
     return parse_file_to_sqlite(raw, filename)
 
 
@@ -206,9 +247,21 @@ def score_case(case: dict[str, Any], result: dict[str, Any], requested_provider:
 def evaluate_case(case: dict[str, Any], schema: dict[str, list[str]], db_path: str, provider: str) -> dict[str, Any]:
     language = normalize_language(case.get("language"))
     question = case["question"]
+    semantic_schema = infer_semantic_schema(schema)
 
     try:
-        sql, prompt, used_provider, rag_used, examples = generate_sql(question, schema, provider=provider, language=language)
+        (
+            sql,
+            prompt,
+            used_provider,
+            rag_used,
+            examples,
+            intent,
+            semantic_schema,
+            planner_used,
+            validation_warnings,
+            rag_debug,
+        ) = generate_sql(question, schema, provider=provider, language=language, semantic_schema=semantic_schema)
         generation_error = None
     except Exception as exc:
         sql = ""
@@ -216,6 +269,10 @@ def evaluate_case(case: dict[str, Any], schema: dict[str, list[str]], db_path: s
         used_provider = provider
         rag_used = False
         examples = []
+        intent = {"name": "generation_error"}
+        planner_used = False
+        validation_warnings = []
+        rag_debug = {}
         generation_error = str(exc)
 
     if generation_error:
@@ -232,6 +289,10 @@ def evaluate_case(case: dict[str, Any], schema: dict[str, list[str]], db_path: s
         "provider": used_provider,
         "rag_used": rag_used,
         "retrieved_examples": examples,
+        "intent": intent,
+        "planner_used": planner_used,
+        "validation_warnings": validation_warnings,
+        "rag_debug": rag_debug,
         "sql": sql,
         "prompt": prompt,
         "sql_error": sql_error,
@@ -266,6 +327,9 @@ def result_for_json(result: dict[str, Any]) -> dict[str, Any]:
         "language": result["language"],
         "provider": result["provider"],
         "rag_used": result["rag_used"],
+        "intent": result.get("intent"),
+        "planner_used": result.get("planner_used"),
+        "validation_warnings": result.get("validation_warnings", []),
         "sql": result["sql"],
         "sql_error": result["sql_error"],
         "chart_error": result["chart_error"],
@@ -277,12 +341,12 @@ def result_for_json(result: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def write_reports(results: list[dict[str, Any]], summary: dict[str, Any], output_dir: Path, provider: str, data_path: Path | None) -> tuple[Path, Path]:
+def write_reports(results: list[dict[str, Any]], summary: dict[str, Any], output_dir: Path, provider: str, data_path: Path | None, fixture: str) -> tuple[Path, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
     payload = {
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "provider": provider,
-        "data": str(data_path) if data_path else "built-in sales fixture",
+        "data": str(data_path) if data_path else f"built-in {fixture} fixture",
         "summary": summary,
         "results": [result_for_json(result) for result in results],
     }
@@ -321,17 +385,19 @@ def write_reports(results: list[dict[str, Any]], summary: dict[str, Any], output
 def main() -> int:
     parser = argparse.ArgumentParser(description="Evaluate DataQuery Web text-to-SQL behavior on sales cases.")
     parser.add_argument("--data", type=Path, default=None, help="Optional CSV/XLSX/JSON data file. Defaults to a built-in sales fixture.")
-    parser.add_argument("--cases", type=Path, default=DEFAULT_CASES, help="Eval case JSON path.")
+    parser.add_argument("--fixture", default="sales", choices=sorted(FIXTURE_CASES), help="Built-in fixture to use when --data is omitted.")
+    parser.add_argument("--cases", type=Path, default=None, help="Eval case JSON path. Defaults to the matching fixture cases.")
     parser.add_argument("--provider", default="auto", choices=["auto", "deepseek", "ollama", "mock"], help="LLM provider to use.")
     parser.add_argument("--limit", type=int, default=None, help="Run only the first N cases.")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_REPORT_DIR, help="Directory for latest.json/latest.md reports.")
     args = parser.parse_args()
 
-    db_path, schema = load_dataset(args.data)
-    cases = load_cases(args.cases, args.limit)
+    case_path = args.cases or FIXTURE_CASES[args.fixture]
+    db_path, schema = load_dataset(args.data, args.fixture)
+    cases = load_cases(case_path, args.limit)
     results = [evaluate_case(case, schema, db_path, args.provider) for case in cases]
     summary = aggregate_scores(results)
-    json_path, md_path = write_reports(results, summary, args.output_dir, args.provider, args.data)
+    json_path, md_path = write_reports(results, summary, args.output_dir, args.provider, args.data, args.fixture)
 
     print(f"Evaluated {len(results)} cases")
     print(f"Score: {summary['total']}/100")

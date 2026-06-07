@@ -73,7 +73,18 @@ export default function ResultCard({ result, language = "vi" }) {
   const hasChart = Boolean(result.chart_base64);
   const hasMetric = Boolean(result.single_metric);
   const rowCount = Number.isFinite(result.row_count) ? result.row_count : rows.length;
-  const defaultTab = hasChart ? "chart" : hasMetric ? "metric" : "table";
+  const questionText = String(result.question || "").toLowerCase();
+  const firstColumn = String(columns[0] || "").toLowerCase();
+  const looksLikeTrendTable =
+    columns.length >= 3 &&
+    (questionText.includes("tăng giảm") ||
+      questionText.includes("xu hướng") ||
+      questionText.includes("theo thời gian") ||
+      questionText.includes("trend") ||
+      questionText.includes("over time") ||
+      firstColumn.includes("thời gian") ||
+      firstColumn.includes("time"));
+  const defaultTab = looksLikeTrendTable ? "table" : hasChart ? "chart" : hasMetric ? "metric" : "table";
   const [tab, setTab] = useState(defaultTab);
   const [copiedKey, setCopiedKey] = useState(null);
 

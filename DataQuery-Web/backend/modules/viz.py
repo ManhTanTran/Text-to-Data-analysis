@@ -37,9 +37,19 @@ _DATE_TERMS = {"year", "nam", "month", "thang", "day", "ngay"}
 
 
 def _name_key(value: object) -> str:
-    text = unicodedata.normalize("NFKD", str(value))
+    text = str(value).replace("đ", "d").replace("Đ", "D")
+    text = unicodedata.normalize("NFKD", text)
     text = text.encode("ascii", "ignore").decode("ascii").lower()
     return re.sub(r"[^a-z0-9]+", " ", text).strip()
+
+
+def _question_prefers_table(question: str) -> bool:
+    key = _name_key(question)
+    if any(term in key for term in ["phan loai", "classify", "segment", "performance group", "nhom hieu suat"]):
+        return True
+    list_terms = ["liet ke", "hien thi toan bo", "show all", "list all"]
+    aggregate_terms = ["tong", "total", "sum", "trung binh", "average", "count", "top", "cao nhat", "thap nhat"]
+    return any(term in key for term in list_terms) and not any(term in key for term in aggregate_terms)
 
 
 def _is_year_column(df: pd.DataFrame, column: str) -> bool:
@@ -150,6 +160,8 @@ def _draw_series(ax, x_labels: list[str], y_values: list[float]) -> None:
 def df_to_chart_base64(df: pd.DataFrame, question: str = "", language: str = "vi") -> tuple[str | None, str | None]:
     if df is None or df.empty:
         return None, "No data"
+    if _question_prefers_table(question):
+        return None, "table_preferred"
 
     df = coerce_numeric_columns(df)
     numeric = df.select_dtypes(include="number").columns.tolist()

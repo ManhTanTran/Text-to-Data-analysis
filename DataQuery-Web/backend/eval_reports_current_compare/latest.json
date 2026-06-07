@@ -1,0 +1,1998 @@
+{
+  "created_at": "2026-06-07T12:23:57",
+  "provider": "deepseek",
+  "data": "built-in sales fixture",
+  "summary": {
+    "total": 92.56,
+    "categories": {
+      "execution": {
+        "raw": 1.0,
+        "points": 30.0,
+        "weight": 30
+      },
+      "result": {
+        "raw": 0.8938,
+        "points": 26.81,
+        "weight": 30
+      },
+      "value": {
+        "raw": 0.85,
+        "points": 17.0,
+        "weight": 20
+      },
+      "chart": {
+        "raw": 0.875,
+        "points": 8.75,
+        "weight": 10
+      },
+      "stability": {
+        "raw": 1.0,
+        "points": 10.0,
+        "weight": 10
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "top_10_revenue_vi",
+      "question": "Hiện top 10 nhân viên có doanh thu cao nhất",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value",
+          "limit": 10,
+          "order": "DESC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\",\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC\nLIMIT 10;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true,
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "top_3_revenue_vi",
+      "question": "Top 3 sales representative có tổng doanh thu cao nhất là ai?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value",
+          "limit": 3,
+          "order": "DESC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\",\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC\nLIMIT 3;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 3,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "top_5_revenue_en",
+      "question": "Show the top 5 sales reps by revenue",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value",
+          "limit": 5,
+          "order": "DESC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_ID\" AS \"Sales Rep ID\",\n  \"Sales_Rep_Name\" AS \"Sales Rep Name\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Total Value\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\nORDER BY \"Total Value\" DESC\nLIMIT 5;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Sales Rep ID",
+        "Sales Rep Name",
+        "Total Value"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "above_average_vi",
+      "question": "Có những nhân viên bán hàng nào có hiệu suất kinh doanh vượt trội so với bình quân?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "above_average_entities",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "WITH \"entity_performance\" AS (\n  SELECT\n    \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\",\n    \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n    SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\",\n    AVG(TO_NUMBER(\"Value\")) AS \"Trung bình giá trị\",\n    COUNT(*) AS \"Số dòng\"\n  FROM \"sales_eval_fixture\"\n  WHERE TO_NUMBER(\"Value\") IS NOT NULL\n  GROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\n),\n\"benchmark\" AS (\n  SELECT AVG(TO_NUMBER(\"Tổng giá trị\")) AS \"Bình quân tổng giá trị\"\n  FROM \"entity_performance\"\n)\nSELECT\n  \"entity_performance\".\"Mã nhân viên bán hàng\",\n  \"entity_performance\".\"Tên nhân viên bán hàng\",\n  \"entity_performance\".\"Tổng giá trị\",\n  \"entity_performance\".\"Trung bình giá trị\",\n  \"entity_performance\".\"Số dòng\",\n  \"benchmark\".\"Bình quân tổng giá trị\",\n  \"entity_performance\".\"Tổng giá trị\" - \"benchmark\".\"Bình quân tổng giá trị\" AS \"Chênh lệch so với bình quân\",\n  ROUND((\"entity_performance\".\"Tổng giá trị\" / NULLIF(\"benchmark\".\"Bình quân tổng giá trị\", 0) - 1) * 100, 2) AS \"Tỷ lệ vượt bình quân (%)\"\nFROM \"entity_performance\"\nCROSS JOIN \"benchmark\"\nWHERE \"entity_performance\".\"Tổng giá trị\" > \"benchmark\".\"Bình quân tổng giá trị\"\nORDER BY \"entity_performance\".\"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị",
+        "Trung bình giá trị",
+        "Số dòng",
+        "Bình quân tổng giá trị",
+        "Chênh lệch so với bình quân",
+        "Tỷ lệ vượt bình quân (%)"
+      ],
+      "row_count": 2,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "above_average_en",
+      "question": "Which sales representatives are above the average sales performance?",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "above_average_entities",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "WITH \"entity_performance\" AS (\n  SELECT\n    \"Sales_Rep_ID\" AS \"Sales Rep ID\",\n    \"Sales_Rep_Name\" AS \"Sales Rep Name\",\n    SUM(TO_NUMBER(\"Value\")) AS \"Total Value\",\n    AVG(TO_NUMBER(\"Value\")) AS \"Average Value\",\n    COUNT(*) AS \"Record Count\"\n  FROM \"sales_eval_fixture\"\n  WHERE TO_NUMBER(\"Value\") IS NOT NULL\n  GROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\n),\n\"benchmark\" AS (\n  SELECT AVG(TO_NUMBER(\"Total Value\")) AS \"Average Total Value\"\n  FROM \"entity_performance\"\n)\nSELECT\n  \"entity_performance\".\"Sales Rep ID\",\n  \"entity_performance\".\"Sales Rep Name\",\n  \"entity_performance\".\"Total Value\",\n  \"entity_performance\".\"Average Value\",\n  \"entity_performance\".\"Record Count\",\n  \"benchmark\".\"Average Total Value\",\n  \"entity_performance\".\"Total Value\" - \"benchmark\".\"Average Total Value\" AS \"Difference Above Average\",\n  ROUND((\"entity_performance\".\"Total Value\" / NULLIF(\"benchmark\".\"Average Total Value\", 0) - 1) * 100, 2) AS \"Above Average Rate (%)\"\nFROM \"entity_performance\"\nCROSS JOIN \"benchmark\"\nWHERE \"entity_performance\".\"Total Value\" > \"benchmark\".\"Average Total Value\"\nORDER BY \"entity_performance\".\"Total Value\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Sales Rep ID",
+        "Sales Rep Name",
+        "Total Value",
+        "Average Value",
+        "Record Count",
+        "Average Total Value",
+        "Difference Above Average",
+        "Above Average Rate (%)"
+      ],
+      "row_count": 2,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "classify_performance_vi",
+      "question": "Làm thế nào để phân loại Sales_Rep_ID thành các nhóm dựa trên hiệu suất bán hàng?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "classify_entities",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "WITH \"entity_performance\" AS (\n  SELECT\n    \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\",\n    \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n    SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\",\n    AVG(TO_NUMBER(\"Value\")) AS \"Trung bình giá trị\",\n    COUNT(*) AS \"Số dòng\"\n  FROM \"sales_eval_fixture\"\n  WHERE TO_NUMBER(\"Value\") IS NOT NULL\n  GROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\n),\n\"ranked\" AS (\n  SELECT\n    \"entity_performance\".*,\n    NTILE(3) OVER (ORDER BY \"Tổng giá trị\" DESC) AS \"_performance_bucket\"\n  FROM \"entity_performance\"\n)\nSELECT\n  \"ranked\".\"Mã nhân viên bán hàng\",\n  \"ranked\".\"Tên nhân viên bán hàng\",\n  \"ranked\".\"Tổng giá trị\",\n  \"ranked\".\"Trung bình giá trị\",\n  \"ranked\".\"Số dòng\",\n  CASE \"_performance_bucket\" WHEN 1 THEN 'Cao' WHEN 2 THEN 'Trung bình' ELSE 'Thấp' END AS \"Nhóm hiệu suất\"\nFROM \"ranked\"\nORDER BY \"ranked\".\"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": "table_preferred",
+      "chart_used": false,
+      "columns": [
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị",
+        "Trung bình giá trị",
+        "Số dòng",
+        "Nhóm hiệu suất"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "classify_performance_en",
+      "question": "Classify sales reps into performance groups based on sales value",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "classify_entities",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "WITH \"entity_performance\" AS (\n  SELECT\n    \"Sales_Rep_ID\" AS \"Sales Rep ID\",\n    \"Sales_Rep_Name\" AS \"Sales Rep Name\",\n    SUM(TO_NUMBER(\"Value\")) AS \"Total Value\",\n    AVG(TO_NUMBER(\"Value\")) AS \"Average Value\",\n    COUNT(*) AS \"Record Count\"\n  FROM \"sales_eval_fixture\"\n  WHERE TO_NUMBER(\"Value\") IS NOT NULL\n  GROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\n),\n\"ranked\" AS (\n  SELECT\n    \"entity_performance\".*,\n    NTILE(3) OVER (ORDER BY \"Total Value\" DESC) AS \"_performance_bucket\"\n  FROM \"entity_performance\"\n)\nSELECT\n  \"ranked\".\"Sales Rep ID\",\n  \"ranked\".\"Sales Rep Name\",\n  \"ranked\".\"Total Value\",\n  \"ranked\".\"Average Value\",\n  \"ranked\".\"Record Count\",\n  CASE \"_performance_bucket\" WHEN 1 THEN 'High' WHEN 2 THEN 'Medium' ELSE 'Low' END AS \"Performance Group\"\nFROM \"ranked\"\nORDER BY \"ranked\".\"Total Value\" DESC;",
+      "sql_error": null,
+      "chart_error": "table_preferred",
+      "chart_used": false,
+      "columns": [
+        "Sales Rep ID",
+        "Sales Rep Name",
+        "Total Value",
+        "Average Value",
+        "Record Count",
+        "Performance Group"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "total_by_year_vi",
+      "question": "Tổng doanh thu theo từng năm là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Year",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Year\" AS \"Năm\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Year\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Năm",
+        "Tổng giá trị"
+      ],
+      "row_count": 3,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "average_by_year_vi",
+      "question": "Trung bình giá trị bán hàng theo năm là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Year",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Year\" AS \"Năm\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Year\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Năm",
+        "Tổng giá trị"
+      ],
+      "row_count": 3,
+      "score": {
+        "execution": 1.0,
+        "result": 0.5,
+        "value": 0.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.5,
+          "value_checks": [
+            false
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "average_by_rep_vi",
+      "question": "Giá trị bán hàng trung bình của từng nhân viên là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Sales_Rep_Name",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 0.5,
+        "value": 0.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.5,
+          "value_checks": [
+            false
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "total_by_rep_vi",
+      "question": "Tổng doanh thu của từng nhân viên bán hàng",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Sales_Rep_Name",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "highest_postcode_vi",
+      "question": "Postcode nào có tổng doanh thu cao nhất?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Postcode"
+          ],
+          "measure": "Value",
+          "limit": 1,
+          "order": "DESC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [
+        "Entity question should return an entity id or name column."
+      ],
+      "sql": "SELECT\n  \"Postcode\" AS \"Mã bưu chính\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Postcode\"\nORDER BY \"Tổng giá trị\" DESC\nLIMIT 1;",
+      "sql_error": null,
+      "chart_error": "No chartable numeric measure",
+      "chart_used": false,
+      "columns": [
+        "Mã bưu chính",
+        "Tổng giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "total_by_postcode_vi",
+      "question": "Tổng doanh thu theo postcode",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Postcode",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Postcode\" AS \"Mã bưu chính\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Postcode\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Mã bưu chính",
+        "Tổng giá trị"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "count_rows_vi",
+      "question": "Đếm tổng số dòng trong Sheet1",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "count_rows",
+        "confidence": 0.86,
+        "details": {
+          "table": "sales_eval_fixture"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT COUNT(*) AS \"Số dòng\"\nFROM \"sales_eval_fixture\";",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Số dòng"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "show_all_vi",
+      "question": "Hiển thị toàn bộ dữ liệu từ Sheet1",
+      "language": "vi",
+      "provider": "deepseek",
+      "rag_used": true,
+      "intent": {
+        "name": "llm_fallback",
+        "confidence": 0.0,
+        "details": {}
+      },
+      "planner_used": false,
+      "validation_warnings": [],
+      "sql": "SELECT * FROM \"sales_eval_fixture\";",
+      "sql_error": null,
+      "chart_error": "table_preferred",
+      "chart_used": false,
+      "columns": [
+        "Mã bưu chính",
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Năm",
+        "Giá trị"
+      ],
+      "row_count": 12,
+      "score": {
+        "execution": 1.0,
+        "result": 0.75,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.75,
+          "value_checks": [],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": [
+        {
+          "db_id": "yelp",
+          "question": "Find all Apple Store in \" Los Angeles \"",
+          "query": "SELECT business_id FROM business WHERE city  =  \"Los Angeles\" AND name  =  \"Apple Store\";",
+          "score": 0.4022,
+          "features": {
+            "has_agg": false,
+            "has_group_by": false,
+            "has_order_by": false,
+            "has_join": false,
+            "has_nested": false,
+            "has_limit": false
+          },
+          "retrieval_mode": "embedding",
+          "base_score": 0.4022,
+          "skeleton_score": 0.0
+        },
+        {
+          "db_id": "academic",
+          "question": "return me the papers after 2000 .",
+          "query": "SELECT title FROM publication WHERE YEAR  >  2000;",
+          "score": 0.3686,
+          "features": {
+            "has_agg": false,
+            "has_group_by": false,
+            "has_order_by": false,
+            "has_join": false,
+            "has_nested": false,
+            "has_limit": false
+          },
+          "retrieval_mode": "embedding",
+          "base_score": 0.3686,
+          "skeleton_score": 0.0
+        },
+        {
+          "db_id": "yelp",
+          "question": "Find all states in which there is a Whataburger",
+          "query": "SELECT state FROM business WHERE name  =  \"Whataburger\";",
+          "score": 0.3674,
+          "features": {
+            "has_agg": false,
+            "has_group_by": false,
+            "has_order_by": false,
+            "has_join": false,
+            "has_nested": false,
+            "has_limit": false
+          },
+          "retrieval_mode": "embedding",
+          "base_score": 0.3674,
+          "skeleton_score": 0.0
+        },
+        {
+          "db_id": "scholar",
+          "question": "2014 papers",
+          "query": "SELECT DISTINCT paperid FROM paper WHERE YEAR  =  2014;",
+          "score": 0.3607,
+          "features": {
+            "has_agg": false,
+            "has_group_by": false,
+            "has_order_by": false,
+            "has_join": false,
+            "has_nested": false,
+            "has_limit": false
+          },
+          "retrieval_mode": "embedding",
+          "base_score": 0.3607,
+          "skeleton_score": 0.0
+        }
+      ]
+    },
+    {
+      "id": "sales_by_year_rep_vi",
+      "question": "Doanh thu thay đổi theo từng năm cho mỗi nhân viên bán hàng như thế nào?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "trend_over_time",
+        "confidence": 0.95,
+        "details": {
+          "table": "sales_eval_fixture",
+          "time_column": "Year",
+          "measures": [
+            "Value"
+          ],
+          "grain": "year"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  \"Year\" AS \"Năm\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE \"Year\" IS NOT NULL\nGROUP BY \"Sales_Rep_Name\", \"Year\"\nORDER BY \"Tên nhân viên bán hàng\" ASC, \"Năm\" ASC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Tên nhân viên bán hàng",
+        "Năm",
+        "Tổng giá trị"
+      ],
+      "row_count": 12,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "best_rep_each_year_vi",
+      "question": "Nhân viên bán hàng nào có doanh thu cao nhất trong từng năm?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value",
+          "limit": 1,
+          "order": "DESC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\",\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC\nLIMIT 1;",
+      "sql_error": null,
+      "chart_error": "No chartable numeric measure",
+      "chart_used": false,
+      "columns": [
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 0.6666666666666666,
+        "value": 1.0,
+        "chart": 0.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.6666666666666666,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": false,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "low_revenue_reps_vi",
+      "question": "Những nhân viên nào có doanh thu thấp nhất?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value",
+          "limit": 1,
+          "order": "ASC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\",\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" ASC\nLIMIT 1;",
+      "sql_error": null,
+      "chart_error": "No chartable numeric measure",
+      "chart_used": false,
+      "columns": [
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 0.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": false,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "min_revenue_vi",
+      "question": "Doanh thu thấp nhất là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "single_aggregate",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "MIN"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  MIN(TO_NUMBER(\"Value\")) AS \"Nhỏ nhất giá trị\"\nFROM \"sales_eval_fixture\"\n;",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Nhỏ nhất giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "max_revenue_vi",
+      "question": "Doanh thu cao nhất là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "single_aggregate",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "MAX"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  MAX(TO_NUMBER(\"Value\")) AS \"Lớn nhất giá trị\"\nFROM \"sales_eval_fixture\"\n;",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Lớn nhất giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "total_sales_scalar_vi",
+      "question": "Tổng doanh thu toàn bộ là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "single_aggregate",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\n;",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Tổng giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "avg_sales_scalar_vi",
+      "question": "Trung bình doanh thu toàn bộ là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "single_aggregate",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "AVG"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  AVG(TO_NUMBER(\"Value\")) AS \"Trung bình giá trị\"\nFROM \"sales_eval_fixture\"\n;",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Trung bình giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "sales_distribution_postcode_vi",
+      "question": "Phân bố doanh thu theo khu vực postcode như thế nào?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "distribution_count",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Postcode",
+          "count_column": "Sales_Rep_ID"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Postcode\" AS \"Mã bưu chính\",\n  COUNT(DISTINCT \"Sales_Rep_ID\") AS \"Số lượng\"\nFROM \"sales_eval_fixture\"\nWHERE \"Postcode\" IS NOT NULL AND TRIM(\"Postcode\") <> ''\nGROUP BY \"Postcode\"\nORDER BY \"Số lượng\" DESC;",
+      "sql_error": null,
+      "chart_error": "No chartable numeric measure",
+      "chart_used": false,
+      "columns": [
+        "Mã bưu chính",
+        "Số lượng"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 0.5,
+        "value": 0.0,
+        "chart": 0.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.5,
+          "value_checks": [
+            false
+          ],
+          "chart_ok": false,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "rep_transaction_count_vi",
+      "question": "Mỗi nhân viên bán hàng có bao nhiêu giao dịch?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_count",
+        "confidence": 0.86,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Sales_Rep_Name"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  COUNT(*) AS \"Số giao dịch\"\nFROM \"sales_eval_fixture\"\nGROUP BY \"Sales_Rep_Name\"\nORDER BY \"Số giao dịch\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Tên nhân viên bán hàng",
+        "Số giao dịch"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "distinct_rep_count_vi",
+      "question": "Có bao nhiêu nhân viên bán hàng khác nhau?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "count_distinct_entity",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "count_column": "Sales_Rep_ID"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT COUNT(DISTINCT \"Sales_Rep_ID\") AS \"Số lượng nhân viên\"\nFROM \"sales_eval_fixture\";",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Số lượng nhân viên"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "year_2012_sales_vi",
+      "question": "Tổng doanh thu trong năm 2012 là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "single_aggregate",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE \"Year\" = '2012';",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Tổng giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "postcodes_for_jane_vi",
+      "question": "Jane bán hàng ở những postcode nào?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "list_projection",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "columns": [
+            "Postcode"
+          ]
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT DISTINCT\n  \"Postcode\" AS \"Mã bưu chính\"\nFROM \"sales_eval_fixture\"\nWHERE \"Sales_Rep_Name\" = 'Jane'\nORDER BY \"Mã bưu chính\" ASC;",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Mã bưu chính"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "sales_rep_name_alias_vi",
+      "question": "Liệt kê tên nhân viên bán hàng và tổng doanh thu",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Sales_Rep_Name",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "english_alias_en",
+      "question": "List sales rep names and total revenue",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Sales_Rep_Name",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Sales Rep Name\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Total Value\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_Name\"\nORDER BY \"Total Value\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Sales Rep Name",
+        "Total Value"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "no_chart_text_only_vi",
+      "question": "Liệt kê tên nhân viên bán hàng",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "list_projection",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "columns": [
+            "Sales_Rep_Name"
+          ]
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT DISTINCT\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\"\nFROM \"sales_eval_fixture\"\nORDER BY \"Tên nhân viên bán hàng\" ASC;",
+      "sql_error": null,
+      "chart_error": "table_preferred",
+      "chart_used": false,
+      "columns": [
+        "Tên nhân viên bán hàng"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "no_chart_id_only_vi",
+      "question": "Liệt kê mã nhân viên bán hàng",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "list_projection",
+        "confidence": 0.82,
+        "details": {
+          "table": "sales_eval_fixture",
+          "columns": [
+            "Sales_Rep_ID"
+          ]
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT DISTINCT\n  \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\"\nFROM \"sales_eval_fixture\"\nORDER BY \"Mã nhân viên bán hàng\" ASC;",
+      "sql_error": null,
+      "chart_error": "table_preferred",
+      "chart_used": false,
+      "columns": [
+        "Mã nhân viên bán hàng"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "year_column_not_y_axis_vi",
+      "question": "Hiển thị năm và trung bình giá trị bán hàng theo năm",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Year",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Year\" AS \"Năm\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Year\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Năm",
+        "Tổng giá trị"
+      ],
+      "row_count": 3,
+      "score": {
+        "execution": 1.0,
+        "result": 0.5,
+        "value": 0.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.5,
+          "value_checks": [
+            false
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "top_postcodes_en",
+      "question": "Show top 5 postcodes by total sales value",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Postcode"
+          ],
+          "measure": "Value",
+          "limit": 5,
+          "order": "DESC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Postcode\" AS \"Postcode\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Total Value\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Postcode\"\nORDER BY \"Total Value\" DESC\nLIMIT 5;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Postcode",
+        "Total Value"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "average_sales_rep_en",
+      "question": "What is the average sales value for each sales representative?",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Sales_Rep_Name",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Sales Rep Name\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Total Value\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_Name\"\nORDER BY \"Total Value\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Sales Rep Name",
+        "Total Value"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 0.5,
+        "value": 0.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.5,
+          "value_checks": [
+            false
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "total_by_year_en",
+      "question": "What is the total sales value for each year?",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Year",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Year\" AS \"Year\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Total Value\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Year\"\nORDER BY \"Total Value\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Year",
+        "Total Value"
+      ],
+      "row_count": 3,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "count_by_year_en",
+      "question": "How many sales records are there in each year?",
+      "language": "en",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_count",
+        "confidence": 0.86,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Year"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Year\" AS \"Year\",\n  COUNT(*) AS \"Record Count\"\nFROM \"sales_eval_fixture\"\nGROUP BY \"Year\"\nORDER BY \"Record Count\" DESC;",
+      "sql_error": null,
+      "chart_error": "No chartable numeric measure",
+      "chart_used": false,
+      "columns": [
+        "Year",
+        "Record Count"
+      ],
+      "row_count": 3,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 0.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": false,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "sales_gap_top_bottom_vi",
+      "question": "Chênh lệch doanh thu giữa nhân viên cao nhất và thấp nhất là bao nhiêu?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_bottom_gap",
+        "confidence": 0.86,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "WITH \"entity_totals\" AS (\n  SELECT SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\n  FROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\n  GROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\n)\nSELECT MAX(\"Tổng giá trị\") - MIN(\"Tổng giá trị\") AS \"Chênh lệch\"\nFROM \"entity_totals\";",
+      "sql_error": null,
+      "chart_error": "single_metric",
+      "chart_used": false,
+      "columns": [
+        "Chênh lệch"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true,
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "rep_sales_in_year_vi",
+      "question": "Doanh thu của từng nhân viên trong năm 2013",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Sales_Rep_Name",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL AND \"Year\" = '2013'\nGROUP BY \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 4,
+      "score": {
+        "execution": 1.0,
+        "result": 1.0,
+        "value": 1.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 1.0,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "postcode_average_vi",
+      "question": "Trung bình doanh thu theo từng postcode",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "group_aggregate",
+        "confidence": 0.9,
+        "details": {
+          "table": "sales_eval_fixture",
+          "group_column": "Postcode",
+          "measures": [
+            "Value"
+          ],
+          "aggregate": "SUM"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Postcode\" AS \"Mã bưu chính\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Postcode\"\nORDER BY \"Tổng giá trị\" DESC;",
+      "sql_error": null,
+      "chart_error": null,
+      "chart_used": true,
+      "columns": [
+        "Mã bưu chính",
+        "Tổng giá trị"
+      ],
+      "row_count": 5,
+      "score": {
+        "execution": 1.0,
+        "result": 0.5,
+        "value": 0.0,
+        "chart": 1.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.5,
+          "value_checks": [
+            false
+          ],
+          "chart_ok": true,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    },
+    {
+      "id": "rep_best_year_vi",
+      "question": "Năm nào mỗi nhân viên bán hàng đạt doanh thu cao nhất?",
+      "language": "vi",
+      "provider": "planner",
+      "rag_used": false,
+      "intent": {
+        "name": "top_n_entities",
+        "confidence": 0.88,
+        "details": {
+          "table": "sales_eval_fixture",
+          "entity_columns": [
+            "Sales_Rep_ID",
+            "Sales_Rep_Name"
+          ],
+          "measure": "Value",
+          "limit": 1,
+          "order": "DESC"
+        }
+      },
+      "planner_used": true,
+      "validation_warnings": [],
+      "sql": "SELECT\n  \"Sales_Rep_ID\" AS \"Mã nhân viên bán hàng\",\n  \"Sales_Rep_Name\" AS \"Tên nhân viên bán hàng\",\n  SUM(TO_NUMBER(\"Value\")) AS \"Tổng giá trị\"\nFROM \"sales_eval_fixture\"\nWHERE TO_NUMBER(\"Value\") IS NOT NULL\nGROUP BY \"Sales_Rep_ID\", \"Sales_Rep_Name\"\nORDER BY \"Tổng giá trị\" DESC\nLIMIT 1;",
+      "sql_error": null,
+      "chart_error": "No chartable numeric measure",
+      "chart_used": false,
+      "columns": [
+        "Mã nhân viên bán hàng",
+        "Tên nhân viên bán hàng",
+        "Tổng giá trị"
+      ],
+      "row_count": 1,
+      "score": {
+        "execution": 1.0,
+        "result": 0.3333333333333333,
+        "value": 1.0,
+        "chart": 0.0,
+        "stability": 1.0,
+        "checks": {
+          "execution_ok": true,
+          "required_columns": 0.3333333333333333,
+          "value_checks": [
+            true
+          ],
+          "chart_ok": false,
+          "stability_ok": true
+        }
+      },
+      "retrieved_examples": []
+    }
+  ]
+}
