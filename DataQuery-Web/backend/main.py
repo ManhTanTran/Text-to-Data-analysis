@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import uuid
+import math
 
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -34,6 +35,33 @@ app.add_middleware(
 )
 
 sessions: dict = {}
+
+
+def _json_safe(value):
+    if value is None:
+        return None
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_safe(item) for item in value]
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    try:
+        if pd.isna(value):
+            return None
+    except (TypeError, ValueError):
+        pass
+    if hasattr(value, "item"):
+        try:
+            return _json_safe(value.item())
+        except Exception:
+            pass
+    if hasattr(value, "isoformat"):
+        try:
+            return value.isoformat()
+        except Exception:
+            pass
+    return value
 
 
 @app.get("/api/status")
@@ -192,9 +220,11 @@ def run_query(body: QueryBody):
     if df is not None and len(df) == 1 and len(df.columns) == 1:
         single_metric = str(df.iloc[0, 0])
 
-    return {
+    rows = _json_safe(df.to_dict("records")) if df is not None else []
+
+    return _json_safe({
         "sql": sql,
-        "rows": df.to_dict("records") if df is not None else [],
+        "rows": rows,
         "columns": list(df.columns) if df is not None else [],
         "chart_base64": chart_b64,
         "sql_error": sql_error,
@@ -217,4 +247,4 @@ def run_query(body: QueryBody):
         "draft_sql": rag_debug.get("draft_sql"),
         "target_skeleton": rag_debug.get("target_skeleton"),
         "retrieval_stage": rag_debug.get("retrieval_stage"),
-    }
+    })
